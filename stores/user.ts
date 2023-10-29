@@ -1,6 +1,7 @@
-import {defineStore} from "pinia";
-import axios from "~/plugins/axios";
-const $axios=axios.provide.axios
+import { defineStore } from 'pinia'
+import axios from '~~/plugins/axios'
+
+const $axios = axios().provide.axios
 
 
 export const useUserStore = defineStore('user', {
