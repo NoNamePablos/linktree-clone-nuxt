@@ -18,7 +18,7 @@ export default defineNuxtConfig({
     "@pinia-plugin-persistedstate/nuxt",
     "@vite-pwa/nuxt",
   ],
-  pwa: {
+/*  pwa: {
     manifest: {
       name: "Linktree Clone",
       short_name: "Linktree Clone",
@@ -41,7 +41,7 @@ export default defineNuxtConfig({
       enabled: true,
       type: "module",
     },
-  },
+  },*/
   app: {
     head: {
       charset: 'utf-8',

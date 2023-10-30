@@ -1,29 +1,28 @@
-import { defineStore } from 'pinia'
-import axios from '~~/plugins/axios'
+import { defineStore } from 'pinia';
+import axios from '~~/plugins/axios';
 
-const $axios = axios().provide.axios
-
+const $axios = axios().provide.axios;
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    id:"",
-    theme_id:'',
-    email:'',
-    name:'',
-    image:'',
-    bio:'',
-    theme:null,
-    colors:null,
-    allLinks:null,
-    isMobile:false,
-    updatedLinkId:0,
-    addLinkOverlay:false,
-    isPreviewOverlay:false,
+    id: '',
+    theme_id: '',
+    email: '',
+    name: '',
+    image: '',
+    bio: '',
+    theme: null,
+    colors: null,
+    allLinks: null,
+    isMobile: false,
+    updatedLinkId: 0,
+    addLinkOverlay: false,
+    isPreviewOverlay: false,
   }),
-  actions:{
+  actions: {
     //
   },
-  persist:true,
+  persist: true,
 });
 
 interface UserInfo {
