@@ -1,6 +1,30 @@
 <script setup lang="ts">
   import AdminLayout from '~/layouts/AdminLayout.vue';
+  import type {Ref} from "vue";
   const userStore = useUserStore();
+  const showAddlink:Ref<boolean>=ref(false);
+  interface ISelectedInput{
+    id:number,
+    str:string
+  }
+
+  const selectedInput:Ref<ISelectedInput>=ref({
+    id:0,
+    str:''
+  })
+  const updatedInput=(e:ISelectedInput)=>{
+    selectedInput.value.id=e.id;
+    selectedInput.value.str=e.str;
+  }
+  const showAddLinkFunc=()=>{
+    if(userStore.isMobile){
+      userStore.addLinkOverlay=true;
+    }else{
+      showAddlink.value=true;
+    }
+  }
+
+
 </script>
 
 <template>
@@ -22,6 +46,20 @@
             <span v-if="!userStore.isMobile">Add Link</span>
             <span v-if="userStore.isMobile">Add new Link</span>
           </button>
+          <AddLink
+            v-if="!userStore.isMobile"
+            @close="()=>showAddlink=false"
+            :class="[
+                {
+                  'mt-20 md:mt-8 mb-12 max-h-[1000px] transition-all duration-300 ease-in':showAddlink
+                },
+                {
+                  'max-h-0 transition-all duration-300 ease-out':!showAddlink
+                },
+            ]"
+          />
+          <LinkBox />
+
         </div>
       </div>
     </div>
