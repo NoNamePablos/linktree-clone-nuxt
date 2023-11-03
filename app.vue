@@ -1,7 +1,7 @@
 <template>
   <div>
     <VitePwaManifest />
-    <div v-if="bgIsGray" class="bg-[#f3f3f1] fixed w-full h-full z-[-1]"/>
+    <div v-if="bgIsGray" class="bg-[#f3f3f1] fixed w-full h-full z-[-1]" />
     <NuxtPage />
   </div>
 </template>
@@ -69,13 +69,11 @@
     ];
   };
 
-  const checkPath=(path:string):void=>{
-    if(path==='/' || path==='/register'){
-      bgIsGray.value=false;
+  const checkPath = (path: string): void => {
+    if (path === '/' || path === '/register') {
+      bgIsGray.value = false;
       return;
     }
-    bgIsGray.value=true;
-  }
-
-
+    bgIsGray.value = true;
+  };
 </script>

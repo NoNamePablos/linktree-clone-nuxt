@@ -1,30 +1,37 @@
 <script setup lang="ts">
   import AdminLayout from '~/layouts/AdminLayout.vue';
-  import type {Ref} from "vue";
+  import type { Ref } from 'vue';
   const userStore = useUserStore();
-  const showAddlink:Ref<boolean>=ref(false);
-  interface ISelectedInput{
-    id:number,
-    str:string
+  const showAddlink: Ref<boolean> = ref(false);
+  interface ISelectedInput {
+    id: number;
+    str: string;
   }
 
-  const selectedInput:Ref<ISelectedInput>=ref({
-    id:0,
-    str:''
-  })
-  const updatedInput=(e:ISelectedInput)=>{
-    selectedInput.value.id=e.id;
-    selectedInput.value.str=e.str;
-  }
-  const showAddLinkFunc=()=>{
-    if(userStore.isMobile){
-      userStore.addLinkOverlay=true;
-    }else{
-      showAddlink.value=true;
+  const selectedInput: Ref<ISelectedInput> = ref({
+    id: 0,
+    str: '',
+  });
+  const fakeLink = [
+    {
+      id: 1,
+      name: 'Yt Chanel',
+      url: 'https://dev.to/alexdrocks/using-lodash-debounce-with-react-hooks-for-an-async-data-fetching-input-2p4g',
+      image:
+        'https://avatars.mds.yandex.net/get-mpic/11375416/2a0000018b56bcb47a42097dc308fd55ef96/300x300',
+    },
+  ];
+  const updatedInput = (e: ISelectedInput) => {
+    selectedInput.value.id = e.id;
+    selectedInput.value.str = e.str;
+  };
+  const showAddLinkFunc = () => {
+    if (userStore.isMobile) {
+      userStore.addLinkOverlay = true;
+    } else {
+      showAddlink.value = true;
     }
-  }
-
-
+  };
 </script>
 
 <template>
@@ -48,18 +55,25 @@
           </button>
           <AddLink
             v-if="!userStore.isMobile"
-            @close="()=>showAddlink=false"
+            @close="() => (showAddlink = false)"
             :class="[
-                {
-                  'mt-20 md:mt-8 mb-12 max-h-[1000px] transition-all duration-300 ease-in':showAddlink
-                },
-                {
-                  'max-h-0 transition-all duration-300 ease-out':!showAddlink
-                },
-            ]"
-          />
-          <LinkBox />
-
+              {
+                'mt-20 md:mt-8 mb-12 max-h-[1000px] transition-all duration-300 ease-in':
+                  showAddlink,
+              },
+              {
+                'max-h-0 transition-all duration-300 ease-out': !showAddlink,
+              },
+            ]" />
+          <div v-for="link in fakeLink" class="mt-4">
+            <LinkBox
+              v-if="link"
+              :link="link"
+              :selected-id="selectedInput.id"
+              :selected-str="selectedInput.str"
+              @updatedInput="updatedInput"
+              class="mt-6" />
+          </div>
         </div>
       </div>
     </div>
