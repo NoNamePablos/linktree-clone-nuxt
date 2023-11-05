@@ -3,11 +3,17 @@
     <VitePwaManifest />
     <div v-if="bgIsGray" class="bg-[#f3f3f1] fixed w-full h-full z-[-1]" />
     <NuxtPage />
+    <!--    <UpdateLinkOverlay v-if="isMobile&&updatedLinkId" />-->
+    <UpdateLinkOverlay />
+    <VAddLinkOverlay v-if="isMobile && addLinkOverlay" />
+    <PreviewOverlay v-if="isMobile && isPreviewOverlay" />
   </div>
 </template>
 <script lang="ts" setup>
   import { storeToRefs } from 'pinia';
   import type { Ref } from 'vue';
+  import VAddLinkOverlay from '~/components/AddLinkOverlay/VAddLinkOverlay.vue';
+  import UpdateLinkOverlay from '~/components/UpdateLinkOverlay/UpdateLinkOverlay.vue';
 
   const userStore = useUserStore();
   const { isMobile, isPreviewOverlay, updatedLinkId, addLinkOverlay, id } =

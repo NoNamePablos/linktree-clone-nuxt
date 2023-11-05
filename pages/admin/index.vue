@@ -20,8 +20,23 @@
       image:
         'https://avatars.mds.yandex.net/get-mpic/11375416/2a0000018b56bcb47a42097dc308fd55ef96/300x300',
     },
+    {
+      id: 2,
+      name: 'Yt Chanel2',
+      url: 'https://dev.to/alexdrocks/using-lodash-debounce-with-react-hooks-for-an-async-data-fetching-input-2p4g',
+      image:
+        'https://avatars.mds.yandex.net/get-mpic/11375416/2a0000018b56bcb47a42097dc308fd55ef96/300x300',
+    },
+    {
+      id: 3,
+      name: 'Yt Chanel3',
+      url: 'https://dev.to/alexdrocks/using-lodash-debounce-with-react-hooks-for-an-async-data-fetching-input-2p4g',
+      image:
+        'https://avatars.mds.yandex.net/get-mpic/11375416/2a0000018b56bcb47a42097dc308fd55ef96/300x300',
+    },
   ];
   const updatedInput = (e: ISelectedInput) => {
+    console.log('upd: ', e);
     selectedInput.value.id = e.id;
     selectedInput.value.str = e.str;
   };
@@ -76,6 +91,7 @@
           </div>
         </div>
       </div>
+      <MobileSectionDisplay></MobileSectionDisplay>
     </div>
   </AdminLayout>
 </template>

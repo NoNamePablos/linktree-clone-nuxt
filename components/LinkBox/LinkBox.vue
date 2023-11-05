@@ -32,7 +32,8 @@
     ): void;
   }>();
   onMounted(() => {
-    name.value = link.value?.name;
+    console.log(link.value);
+    name.value = link.avlue?.name;
     url.value = link.value?.url;
     document.addEventListener('mouseup', function (e) {
       let editNameInput = document.getElementById(
