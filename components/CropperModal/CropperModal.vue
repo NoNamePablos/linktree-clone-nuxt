@@ -2,11 +2,12 @@
   import { useUserStore } from '~/stores/user';
   import { Cropper } from 'vue-advanced-cropper';
   import 'vue-advanced-cropper/dist/style.css';
-  import { toRefs } from 'vue';
+  import {toRefs} from 'vue';
+  import type{Ref} from 'vue'
   const userStore = useUserStore();
   const emit = defineEmits<{
     (e: 'close'): void;
-    (e: 'data'): void;
+    (e: 'data',data:FormData): void;
   }>();
   interface ICropperModal {
     linkId: number;
@@ -14,15 +15,71 @@
   const props = defineProps<ICropperModal>();
   const { linkId } = toRefs(props);
   const file = ref(null);
-  const video = ref(null);
+  const video:Ref<HTMLVideoElement|null> = ref(null);
   const canvas = ref(null);
   const isNewPhoto = ref(null);
-  const isOpenCamera = ref(null);
+  const isOpenCamera = ref(false);
   const photoData = ref(null);
   const cropper = ref(null);
   const uploadedImage = ref(null);
   const isTakingPhoto = ref(false);
   const isCropping = ref(false);
+
+  const getUploadImage=(e)=>{
+    file.value=e.target.files[0]
+    uploadedImage.value=URL.createObjectURL(e.target.files[0]);
+    console.log("url generated: ",uploadedImage.value);
+  }
+  const startCamera=async ()=>{
+    isOpenCamera.value=true;
+    if(navigator.mediaDevices){
+      let stream=await navigator.mediaDevices.getUserMedia({
+        video:{
+          width:{max:1024},
+          height:{max:1024},
+          aspectRatio:{ideal:1}
+        }
+      })
+      video.value.srcObject=stream;
+      video.value.play();
+    }
+  }
+
+  const takePhoto=()=>{
+    let videoLocal=video.value;
+    let canvasLocal=canvas.value;
+    canvasLocal.width=videoLocal.getBoundingClientRect().width;
+    canvasLocal.height=videoLocal.getBoundingClientRect().height;
+    let context=canvasLocal.getContext('2d')
+    context.drawImage(videoLocal,0,0,canvasLocal.width,canvasLocal.height)
+    isNewPhoto.value=true;
+    photoData.value=canvasLocal.toDataURL()
+    convertBlobToUrl();
+
+  }
+  const convertBlobToUrl=async()=>{
+      const blob=await (await fetch(photoData.value)).blob()
+      file.value=new File([blob],"NEW_PHOTO.png",{type:blob.type})
+      uploadedImage.value=URL.createObjectURL(file.value)
+      isOpenCamera.value=false
+  }
+  const cropImage=async ()=>{
+    isCropping.value=true
+    const {coordinates}=cropper.value.getResult()
+    let data=new FormData();
+    data.append('image',file.value||'')
+    data.append('height',coordinates.height||'')
+    data.append('width',coordinates.width||'')
+    data.append('left',coordinates.left||'')
+    data.append('top',coordinates.top||'')
+    data.append('id',linkId.value||'')
+    isCropping.value=true
+    emit('data',data)
+  }
+  onUnmounted(()=>{
+    video.value.pause();
+    video.value.currentTime=0;
+  })
 </script>
 
 <template>
@@ -50,7 +107,7 @@
                   class="flex items-center justify-center w-full py-3 rounded-full text-white font-semibold bg-[#8228d9] hover:bg-[#6c21b3] mb-2 cursor-pointer">
                   Upload Photo
                 </label>
-                <input type="file" class="hidden" @change="getUploadImage" />
+                <input type="file" id="file" class="hidden" @change="getUploadImage" />
               </div>
               <div v-if="!uploadedImage && video && video.paused" class="my-4">
                 <button

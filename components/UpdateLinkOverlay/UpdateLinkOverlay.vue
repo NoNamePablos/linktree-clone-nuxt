@@ -159,5 +159,10 @@
         :src="currentLink.image"
         alt="" />
     </div>
+    <CropperModal
+        v-if="openCropper"
+        :linkId="updatedLinkId"
+        @data="($event) => (data = $event)"
+        @close="openCropper = false" />
   </div>
 </template>

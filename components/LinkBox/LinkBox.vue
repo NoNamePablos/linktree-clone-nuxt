@@ -140,7 +140,10 @@
   );
   watch(
     () => data.value,
-    async () => await updateLinkImage(),
+    async () =>{
+      console.log(data.value);
+      await updateLinkImage()
+    },
   );
 </script>
 

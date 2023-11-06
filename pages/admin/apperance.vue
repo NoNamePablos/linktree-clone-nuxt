@@ -128,6 +128,10 @@
         </div>
       </div>
       <MobileSectionDisplay />
+      <CropperModal
+          v-if="openCropper"
+          @data="($event) => (data = $event)"
+          @close="openCropper = false" />
     </div>
   </AdminLayout>
 </template>
