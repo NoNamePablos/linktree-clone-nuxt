@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
     bio: '',
     theme: null,
     colors: null,
-    allLinks: null,
+    allLinks: [],
     isMobile: false,
     updatedLinkId: 0,
     addLinkOverlay: false,

@@ -299,6 +299,11 @@
         </div>
       </div>
     </div>
+    <CropperModal
+      v-if="openCropper"
+      :linkId="link.id"
+      @data="($event) => (data = $event)"
+      @close="openCropper = false" />
   </div>
 </template>
 
