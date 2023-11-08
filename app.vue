@@ -20,17 +20,7 @@
   const route = useRoute();
   const show: Ref<boolean> = ref(false);
   const bgIsGray: Ref<boolean> = ref(false);
-  onMounted(() => {
-    userStore.colors = colors();
-    updatedLinkId.value = 0;
-    addLinkOverlay.value = false;
-    isPreviewOverlay.value = false;
-    isMobile.value = false;
-    checkPath(route.fullPath);
-    if ('ontouchstart' in window) {
-      isMobile.value = true;
-    }
-  });
+
   const colors = () => {
     return [
       { id: 1, color: 'bg-white', text: 'text-black', name: 'Air White' },
@@ -73,6 +63,31 @@
       },
     ];
   };
+  onBeforeMount(()=>{
+    userStore.colors = colors();
+  })
+  onMounted(async() => {
+
+    updatedLinkId.value = 0;
+    addLinkOverlay.value = false;
+    isPreviewOverlay.value = false;
+    isMobile.value = false;
+
+    try {
+      if(userStore.id){
+        await userStore.getUser();
+        await userStore.getAllLinks();
+      }
+    }catch (e){
+      console.log(e);
+    }
+
+    checkPath(route.fullPath);
+    if ('ontouchstart' in window) {
+      isMobile.value = true;
+    }
+  });
+
 
   const checkPath = (path: string): void => {
     if (path === '/' || path === '/register') {
@@ -81,4 +96,17 @@
     }
     bgIsGray.value = true;
   };
+
+  watch(()=>route.fullPath,(path)=>checkPath(path))
+  watch(()=>isPreviewOverlay.value,(val)=>{
+    let id="";
+    if(route.fullPath==='/admin'){
+      id='AdminPage'
+    }else if(route.fullPath=='/admin/apperance'){
+      id='ApperancePage'
+    }else if(route.fullPath=='/admin/settings'){
+      id='SettingsPage'
+    }
+    userStore.hidePageOverflow(val,id);
+  })
 </script>

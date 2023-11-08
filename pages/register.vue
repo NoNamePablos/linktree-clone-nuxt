@@ -23,9 +23,9 @@ const register = async () => {
           userLogin.value.email, 
             userLogin.value.password, 
             userLogin.value.confirmPassword
-        )
-        userStore.getUser()
-        router.push('/admin')
+        ).then((resolve)=>{
+            userStore.getUser()
+          }).then(resolve=> router.push('/admin'))
         })
     } catch (error) {
         console.log(error)

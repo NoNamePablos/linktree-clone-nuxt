@@ -17,11 +17,31 @@
   });
   const updateTheme = async (themeId: number) => {
     //
+    try {
+      await userStore.updateTheme(themeId);
+    }catch (e){
+      console.log("error: ",e);
+    }
   };
   const updateUserDetails = useDebounce(async () => {
     //
-  });
-  const updateUserImage = async () => {};
+    try {
+      await userStore.updateUserDetail(name.value,bio.value);
+      await userStore.getUser();
+    }catch (e){
+      console.log("error: ",e);
+    }
+  },1000);
+  const updateUserImage = async () => {
+    try {
+      await userStore.updateUserImage(data.value);
+      await userStore.getUser();
+      setTimeout(()=>openCropper.value=false,300);
+    }catch (e) {
+      console.log("error upd image: ",e);
+    }
+
+  };
   watch(
     () => name.value,
     async () => await updateUserDetails(),
@@ -64,7 +84,7 @@
                   </button>
                 </div>
               </div>
-              <div class="mt-4">
+              <div class="mt-4 mb-4">
                 <TextInput v-model="name" placeholder="Profile Title" />
               </div>
               <textarea

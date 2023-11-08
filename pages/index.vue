@@ -16,9 +16,10 @@
           userStore.login(
           userLogin.value.email, 
             userLogin.value.password
-        )
-        userStore.getUser()
-        router.push('/admin')
+        ).then(()=>{
+            userStore.getUser()
+            router.push('/admin')
+          })
         })
     } catch (error) {
         console.log(error)
