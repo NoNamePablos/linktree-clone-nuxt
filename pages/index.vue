@@ -1,10 +1,30 @@
 <script setup lang="ts">
   import AuthLayout from '~/layouts/AuthLayout.vue';
-
+  definePageMeta({middleware:'is-logged-in'})
+  const userStore=useUserStore();
+  const router=useRouter();
   const userLogin = ref({
     email: '',
     password: '',
   });
+  const errors=ref(null);
+  const login=async()=>{
+    errors.value=null;
+    
+    try {
+        await userStore.getTokens().then((resolve)=>{
+          userStore.login(
+          userLogin.value.email, 
+            userLogin.value.password
+        )
+        userStore.getUser()
+        router.push('/admin')
+        })
+    } catch (error) {
+        console.log(error)
+        errors.value = error.response.data.errors
+    }
+  }
 </script>
 
 <template>
@@ -13,7 +33,7 @@
       <h1 class="lg:text-5xl text-3xl text-center font-extrabold">
         Log in to your Linktree account
       </h1>
-      <form @submit.prevent="" class="flex flex-col gap-4 mt-20">
+      <form @submit.prevent="login()" class="flex flex-col gap-4 mt-20">
         <TextInput
           v-model="userLogin.email"
           input-type="email"

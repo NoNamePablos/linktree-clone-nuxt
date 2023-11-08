@@ -2,6 +2,7 @@
   import AdminLayout from '~/layouts/AdminLayout.vue';
   import type { Ref } from 'vue';
   const userStore = useUserStore();
+  definePageMeta({middleware:'is-logged-out'})
   const showAddlink: Ref<boolean> = ref(false);
   interface ISelectedInput {
     id: number;

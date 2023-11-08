@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import AdminLayout from '~/layouts/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
-
+  definePageMeta({middleware:'is-logged-out'})
   const userStore = useUserStore();
   const fakeLink = [
     {

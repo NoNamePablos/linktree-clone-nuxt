@@ -2,7 +2,7 @@
   import AdminLayout from '~/layouts/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
   import { useRouter } from 'vue-router';
-
+  definePageMeta({middleware:'is-logged-out'})
   const userStore = useUserStore();
 
   let windowWidth = ref(process.client ? window.innerWidth : '');
@@ -17,8 +17,14 @@
   onUnmounted(() => {
     window.removeEventListener('resize', getWindowWidth);
   });
-  const logout = async () => {
-    let res = confirm('Logout?');
+  const logout = async() => {
+    try{
+        await userStore.logout();
+        router.push('/');
+        return
+    }catch(error){
+      console.log(error);
+    }
   };
   watch(
     () => windowWidth.value,

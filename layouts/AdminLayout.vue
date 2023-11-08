@@ -2,7 +2,7 @@
   import { useUserStore } from '~/stores/user';
   import { storeToRefs } from 'pinia';
   import { onMounted } from 'vue';
-
+  definePageMeta({middleware:'is-logged-out'})
   const userStore = useUserStore();
   const { updatedLinkId } = storeToRefs(userStore);
   const route = useRoute();
@@ -85,7 +85,15 @@
       router.push('/admin/settings');
     }
   };
-  const logout = () => {};
+  const logout = async() => {
+    try{
+        await userStore.logout();
+        router.push('/');
+        return
+    }catch(error){
+      console.log(error);
+    }
+  };
   watch(
     () => windowWidth.value,
     () => {
@@ -180,7 +188,7 @@
       <div
         v-if="isTopNav"
         class="absolute md:block hidden right-4 top-16 border shadow-sm bg-white w-full max-w-[300px] rounded-2xl">
-        <button class="btn wide w-full">
+        <button @click="logout()" class="btn wide w-full">
           <Icon name="circum:logout" class="mr-6" />
           Sign out
         </button>

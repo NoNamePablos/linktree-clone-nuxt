@@ -7,6 +7,7 @@
   const data = ref(null);
   const isBioFocused = ref(false);
   let openCropper = ref(false);
+  definePageMeta({middleware:'is-logged-out'})
   const bioLengthComputed = computed(() => {
     return !bio.value ? 0 : bio.value.length;
   });
