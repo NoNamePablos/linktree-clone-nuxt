@@ -93,8 +93,8 @@ import { onClickOutside } from '@vueuse/core';
 
 <template>
   <div class="fixed z-50 h-full" >
-    <div class="fixed inset-0 bg-black bg-opacity-60 cursor-pointer" />
-    <div class="fixed inset-0 z-10 overflow-auto h-full cursor-pointer">
+    <div class="fixed inset-0 bg-black bg-opacity-60" />
+    <div class="fixed inset-0 z-10 overflow-auto h-full ">
       <div class="flex flex-col min-h-full justify-center items-center py-2 cursor-pointer">
         <div
           class="transform overflow-hidden rounded-lg bg-white shadow-2xl transition-all max-w-lg w-full" ref="cropModal">
