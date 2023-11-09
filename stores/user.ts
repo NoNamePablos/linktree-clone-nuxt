@@ -1,11 +1,31 @@
 import { defineStore } from 'pinia';
+import type { IUserLink } from '~/types/link.interface';
+import type { IUserTheme } from '~/types/theme.interface';
 import axios from '~~/plugins/axios';
 const $axios = axios().provide.axios
+
+
+interface UserInfo {
+  id:string;
+  name: string;
+  bio: string;
+  theme_id:string;
+  email:string;
+  image:string;
+  theme:IUserTheme|null;
+  colors:IUserTheme[];
+  allLinks:IUserLink[];
+  isMobile:boolean;
+  updatedLinkId:number;
+  addLinkOverlay:boolean;
+  isPreviewOverlay:boolean;
+}
+
 
 // @ts-ignore
 // @ts-ignore
 export const useUserStore = defineStore('user', {
-  state: () => ({
+  state: ():UserInfo => ({
     id: '',
     theme_id: '',
     email: '',
@@ -76,7 +96,7 @@ export const useUserStore = defineStore('user', {
         email: email,
         password: password,
         password_confirmation: confirmPassword
-      },{withCredentials:true})
+      })
     },
     async getUser(){
       let res=await $axios.get('/api/users')
@@ -90,10 +110,12 @@ export const useUserStore = defineStore('user', {
     },
     getUserTheme() {
       this.$state.colors.forEach(color => {
-        if (this.$state.theme_id === color.id) {
+        if (+this.$state.theme_id === color.id) {
           this.$state.theme = color
         }
       })
+      console.log("set theme: ",this.$state.theme);
+      
     },
     // @ts-ignore
     async updateUserImage(data) {
@@ -110,7 +132,7 @@ export const useUserStore = defineStore('user', {
       await $axios.patch(`/api/users/${this.$state.id}`,{
         name:name,
         bio:bio,
-      })
+      },{withCredentials:true})
     },
     async updateTheme(themeId:number){
       let res=await $axios.patch('/api/themes',{
@@ -133,7 +155,7 @@ export const useUserStore = defineStore('user', {
       await $axios.patch(`api/links/${id}`,{
         name:name,
         url:url,
-      });
+      },{withCredentials:true});
     },
     async logout(){
       await $axios.post('/logout')
@@ -158,7 +180,3 @@ export const useUserStore = defineStore('user', {
   persist: true,
 });
 
-interface UserInfo {
-  name: string;
-  age: number;
-}

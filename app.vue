@@ -11,8 +11,10 @@
 <script lang="ts" setup>
   import { storeToRefs } from 'pinia';
   import type { Ref } from 'vue';
+  import { reactive } from 'vue';
   import VAddLinkOverlay from '~/components/AddLinkOverlay/VAddLinkOverlay.vue';
   import UpdateLinkOverlay from '~/components/UpdateLinkOverlay/UpdateLinkOverlay.vue';
+  import type { IUserTheme } from '~/types/theme.interface';
 
   const userStore = useUserStore();
   const { isMobile, isPreviewOverlay, updatedLinkId, addLinkOverlay, id } =
@@ -20,9 +22,10 @@
   const route = useRoute();
   const show: Ref<boolean> = ref(false);
   const bgIsGray: Ref<boolean> = ref(false);
+  
+    
 
-  const colors = () => {
-    return [
+    const colors:IUserTheme[]=reactive([
       { id: 1, color: 'bg-white', text: 'text-black', name: 'Air White' },
       { id: 2, color: 'bg-gray-800', text: 'text-white', name: 'Lake Black' },
       {
@@ -61,10 +64,12 @@
         text: 'text-white',
         name: 'Tinted Lake',
       },
-    ];
-  };
+    ])
+
   onBeforeMount(()=>{
-    userStore.colors = colors();
+    userStore.colors = colors;
+    console.log("user colors: ",userStore.colors);
+    
   })
   onMounted(async() => {
 
@@ -75,6 +80,8 @@
 
     try {
       if(userStore.id){
+        console.log("user store is get req");
+        await userStore.hasSessionExpired();
         await userStore.getUser();
         await userStore.getAllLinks();
       }

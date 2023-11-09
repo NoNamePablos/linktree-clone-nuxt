@@ -41,9 +41,11 @@
     selectedInput.value.id = e.id;
     selectedInput.value.str = e.str;
   };
-  const showAddLinkFunc = () => {
+  const showAddLinkFunc = async() => {
     if (userStore.isMobile) {
       userStore.addLinkOverlay = true;
+      console.log("get  user: ", await userStore.getUser());
+      
     } else {
       showAddlink.value = true;
     }

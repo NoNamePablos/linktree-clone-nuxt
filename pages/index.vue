@@ -12,15 +12,16 @@
     errors.value=null;
     
     try {
-        await userStore.getTokens().then((resolve)=>{
-          userStore.login(
-          userLogin.value.email, 
-            userLogin.value.password
-        ).then(()=>{
-            userStore.getUser()
-            router.push('/admin')
+          userStore.getTokens().then(()=>{
+            userStore.login(userLogin.value.email,userLogin.value.password).then(()=>{
+              console.log("after login");
+              userStore.getUser().then(()=>{
+                console.log("redirected");
+                router.push('/admin');
+              })
+            })
           })
-        })
+          
     } catch (error) {
         console.log(error)
         errors.value = error.response.data.errors

@@ -26,8 +26,15 @@
   const updateUserDetails = useDebounce(async () => {
     //
     try {
-      await userStore.updateUserDetail(name.value,bio.value);
-      await userStore.getUser();
+      userStore.getTokens().then(()=>{
+        console.log("token");
+        userStore.updateUserDetail(name.value,bio.value).then(()=>{
+              console.log("after login");
+              userStore.getUser().then(()=>{
+                console.log("get user",userStore.name);
+              })
+            })
+          })
     }catch (e){
       console.log("error: ",e);
     }

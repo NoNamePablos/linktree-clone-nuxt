@@ -2,13 +2,18 @@
   const emit = defineEmits<{
     (e: 'close'): void;
   }>();
-
+  const userStore = useUserStore();
   const name = ref('');
   const url = ref('');
 
   const addLink = async () => {};
 
-  const submit = () => {};
+  const submit = async() => {
+      console.log("submit");
+      await userStore.addLink(name.value,url.value);
+      console.log("after submit");
+  
+  };
 </script>
 
 <template>
