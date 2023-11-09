@@ -2,7 +2,7 @@
   import AdminLayout from '~/layouts/AdminLayout.vue';
   import type { Ref } from 'vue';
   const userStore = useUserStore();
-  definePageMeta({middleware:'is-logged-out'})
+  //definePageMeta({middleware:'is-logged-out'})
   const showAddlink: Ref<boolean> = ref(false);
   interface ISelectedInput {
     id: number;
@@ -44,7 +44,7 @@
   const showAddLinkFunc = async() => {
     if (userStore.isMobile) {
       userStore.addLinkOverlay = true;
-      console.log("get  user: ", await userStore.getUser());
+      
       
     } else {
       showAddlink.value = true;

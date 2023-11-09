@@ -1,5 +1,6 @@
 <script setup lang="ts">
-  import AdminLayout from '~/layouts/AdminLayout.vue';
+  import { onClickOutside } from '@vueuse/core';
+import AdminLayout from '~/layouts/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
   const userStore = useUserStore();
   const name = ref('');
@@ -7,7 +8,7 @@
   const data = ref(null);
   const isBioFocused = ref(false);
   let openCropper = ref(false);
-  definePageMeta({middleware:'is-logged-out'})
+  //definePageMeta({middleware:'is-logged-out'})
   const bioLengthComputed = computed(() => {
     return !bio.value ? 0 : bio.value.length;
   });
@@ -61,6 +62,13 @@
     () => data.value,
     async () => await updateUserImage(),
   );
+
+  const cropModal=ref(null);
+  onClickOutside(
+    cropModal,
+  (event) => {
+    openCropper.value = false
+  })
 </script>
 
 <template>
@@ -157,9 +165,10 @@
       </div>
       <MobileSectionDisplay />
       <CropperModal
+          ref="cropModal"
           v-if="openCropper"
           @data="($event) => (data = $event)"
-          @close="openCropper = false" />
+          @close="openCropper = false" :link-id="1" />
     </div>
   </AdminLayout>
 </template>

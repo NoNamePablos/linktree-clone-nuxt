@@ -4,6 +4,7 @@
   import 'vue-advanced-cropper/dist/style.css';
   import {toRefs} from 'vue';
   import type{Ref} from 'vue'
+import { onClickOutside } from '@vueuse/core';
   const userStore = useUserStore();
   const emit = defineEmits<{
     (e: 'close'): void;
@@ -21,7 +22,7 @@
   const isOpenCamera = ref(false);
   const photoData = ref(null);
   const cropper = ref(null);
-  const uploadedImage = ref(null);
+  const uploadedImage = ref("");
   const isTakingPhoto = ref(false);
   const isCropping = ref(false);
 
@@ -77,18 +78,26 @@
     emit('data',data)
   }
   onUnmounted(()=>{
-    video.value.pause();
-    video.value.currentTime=0;
+    if(isOpenCamera.value){
+      video.value.pause();
+      video.value.currentTime=0;
+    }
+  })
+  const cropModal=ref(null);
+  onClickOutside(
+    cropModal,
+  (event) => {
+    emit('close')
   })
 </script>
 
 <template>
-  <div class="fixed z-50 h-full">
-    <div class="fixed inset-0 bg-black bg-opacity-60" />
-    <div class="fixed inset-0 z-10 overflow-auto h-full">
-      <div class="flex flex-col min-h-full justify-center items-center py-2">
+  <div class="fixed z-50 h-full" >
+    <div class="fixed inset-0 bg-black bg-opacity-60 cursor-pointer" />
+    <div class="fixed inset-0 z-10 overflow-auto h-full cursor-pointer">
+      <div class="flex flex-col min-h-full justify-center items-center py-2 cursor-pointer">
         <div
-          class="transform overflow-hidden rounded-lg bg-white shadow-2xl transition-all max-w-lg w-full">
+          class="transform overflow-hidden rounded-lg bg-white shadow-2xl transition-all max-w-lg w-full" ref="cropModal">
           <div class="flex items-center py-4 border-b border-b-gray-300">
             <div class="text-[22px] font-semibold w-full text-center">
               Pick Image

@@ -2,7 +2,7 @@
   import AdminLayout from '~/layouts/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
   import { useRouter } from 'vue-router';
-  definePageMeta({middleware:'is-logged-out'})
+ // definePageMeta({middleware:'is-logged-out'})
   const userStore = useUserStore();
 
   let windowWidth = ref(process.client ? window.innerWidth : '');

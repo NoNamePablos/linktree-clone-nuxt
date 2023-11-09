@@ -281,7 +281,7 @@
         <Icon
           @click="($event) => (isUploadImage = false)"
           name="mdi:close"
-          class="absolute right-1 top-[6px] cursor-pointer"
+          class="absolute right-1 top-0 cursor-pointer"
           size="20"
           color="#45494a" />
         <div class="text-center text-sm font-bold text-[#45494A]">

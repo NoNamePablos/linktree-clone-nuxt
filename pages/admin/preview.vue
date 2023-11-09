@@ -69,5 +69,3 @@
     </div>
   </AdminLayout>
 </template>
-
-<style scoped></style>

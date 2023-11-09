@@ -2,11 +2,15 @@
   import { useUserStore } from '~/stores/user';
   import { storeToRefs } from 'pinia';
   import { onMounted } from 'vue';
-  definePageMeta({middleware:'is-logged-out'})
+
+  import type { OnClickOutsideHandler } from '@vueuse/core'
+  import { onClickOutside } from '@vueuse/core'
+
   const userStore = useUserStore();
   const { updatedLinkId } = storeToRefs(userStore);
   const route = useRoute();
   const router = useRouter();
+  
   const links = ref([
     {
       name: 'Links',
@@ -124,6 +128,15 @@
       windowWidth.value = window.innerWidth;
     });
   });
+  const modalRef = ref(null)
+  onClickOutside(
+  modalRef,
+  (event) => {
+    isTopNav.value = false
+  },
+)
+
+
 </script>
 
 <template>
@@ -187,6 +200,7 @@
       </div>
       <div
         v-if="isTopNav"
+        ref="modalRef"
         class="absolute md:block hidden right-4 top-16 border shadow-sm bg-white w-full max-w-[300px] rounded-2xl">
         <button @click="logout()" class="btn wide w-full">
           <Icon name="circum:logout" class="mr-6" />
