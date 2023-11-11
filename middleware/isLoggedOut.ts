@@ -1,7 +1,7 @@
-import {useUserStore} from "~/stores/user";
+import { useUserStore } from '~/stores/user';
 export default defineNuxtRouteMiddleware((to, from) => {
-    const userStore=useUserStore()
-   if(!userStore.id){
+  const userStore = useUserStore();
+  if (!userStore.id) {
     return navigateTo('/');
-   }
-})
+  }
+});

@@ -1,35 +1,36 @@
 <script setup lang="ts">
-  import AdminLayout from '~/layouts/AdminLayout.vue';
+  import AdminLayout from '~/layouts/AdminLayout/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
   import { useRouter } from 'vue-router';
- // definePageMeta({middleware:'is-logged-out'})
+  // definePageMeta({middleware:'is-logged-out'})
   const userStore = useUserStore();
+  const router = useRouter();
 
   let windowWidth = ref(process.client ? window.innerWidth : '');
 
-  const getWindowWidth = () => {
+  const getWindowWidth = (): void => {
     windowWidth.value = window.innerWidth;
   };
-  const router = useRouter();
+
   onMounted(() => {
     window.addEventListener('resize', getWindowWidth);
   });
   onUnmounted(() => {
     window.removeEventListener('resize', getWindowWidth);
   });
-  const logout = async() => {
-    try{
-        await userStore.logout();
-        router.push('/');
-        return
-    }catch(error){
+  const logout = async (): Promise<void> => {
+    try {
+      await userStore.logout();
+      router.push('/');
+      return;
+    } catch (error) {
       console.log(error);
     }
   };
   watch(
     () => windowWidth.value,
     () => {
-      if (windowWidth.value >= 767) {
+      if ((windowWidth.value as number) >= 767) {
         router.push('/admin');
       }
     },

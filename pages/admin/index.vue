@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import AdminLayout from '~/layouts/AdminLayout.vue';
+  import AdminLayout from '~/layouts/AdminLayout/AdminLayout.vue';
   import type { Ref } from 'vue';
+  import type { IUserExtendLink } from '~/types/link.interface';
   const userStore = useUserStore();
   //definePageMeta({middleware:'is-logged-out'})
   const showAddlink: Ref<boolean> = ref(false);
@@ -13,7 +14,7 @@
     id: 0,
     str: '',
   });
-  const fakeLink = [
+  const fakeLink: IUserExtendLink[] = [
     {
       id: 1,
       name: 'Yt Chanel',
@@ -36,16 +37,13 @@
         'https://avatars.mds.yandex.net/get-mpic/11375416/2a0000018b56bcb47a42097dc308fd55ef96/300x300',
     },
   ];
-  const updatedInput = (e: ISelectedInput) => {
-    console.log('upd: ', e);
+  const updatedInput = (e: ISelectedInput): void => {
     selectedInput.value.id = e.id;
     selectedInput.value.str = e.str;
   };
-  const showAddLinkFunc = async() => {
+  const showAddLinkFunc = async (): Promise<void> => {
     if (userStore.isMobile) {
       userStore.addLinkOverlay = true;
-      
-      
     } else {
       showAddlink.value = true;
     }

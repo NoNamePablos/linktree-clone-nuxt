@@ -1,28 +1,35 @@
 <script setup lang="ts">
   import { useUserStore } from '~/stores/user';
   import { storeToRefs } from 'pinia';
+  import type { Ref } from 'vue';
+  import type { IUserLink } from '~/types/link.interface';
+
   const userStore = useUserStore();
   const { addLinkOverlay, updatedLinkId } = storeToRefs(userStore);
-  const isName = ref(false);
-  const isLink = ref(false);
-  const name = ref('');
-  const url = ref('');
+  const isName: Ref<boolean> = ref(false);
+  const isLink: Ref<boolean> = ref(false);
+  const name: Ref<string> = ref('');
+  const url: Ref<string> = ref('');
   const data = ref(null);
-  const currentLink = ref(null);
+  const currentLink: Ref<IUserLink | null> = ref(null);
   const openCropper = ref(false);
   onMounted(() => {
     //getlinkbyid
     //userStore.hidePageOverflow(trie,'AdminPage')
     document.addEventListener('mouseup', function (e) {
       let editNameInput = document.getElementById('editNameInputMobile');
+      //@ts-ignore
       if (!editNameInput.contains(e.target)) {
+        //@ts-ignore
         editNameInput.blur();
         isName.value = false;
       }
     });
     document.addEventListener('mouseup', function (e) {
       let editLinkInput = document.getElementById('editLinkInputMobile');
+      //@ts-ignore
       if (!editLinkInput.contains(e.target)) {
+        //@ts-ignore
         editLinkInput.blur();
         isLink.value = false;
       }
@@ -48,11 +55,13 @@
   };
   const isFocused = (str: string) => {
     if (str == 'isName') {
+      //@ts-ignore
       setTimeout(() => document.getElementById('editNameInputMobile').focus());
       isName.value = true;
       isLink.value = false;
     }
     if (str == 'isLink') {
+      //@ts-ignore
       setTimeout(() => document.getElementById('editLinkInputMobile').focus());
       isName.value = false;
       isLink.value = true;
@@ -160,9 +169,9 @@
         alt="" />
     </div>
     <CropperModal
-        v-if="openCropper"
-        :linkId="updatedLinkId"
-        @data="($event) => (data = $event)"
-        @close="openCropper = false" />
+      v-if="openCropper"
+      :linkId="updatedLinkId"
+      @data="($event) => (data = $event)"
+      @close="openCropper = false" />
   </div>
 </template>

@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import { useUserStore } from '~/stores/user';
+  import type { Ref } from 'vue';
+  import type { IUserExtendLink } from '~/types/link.interface';
 
-  const fakeLink = [
+  const fakeLink: IUserExtendLink[] = [
     {
       id: 1,
       name: 'Yt Chanel',

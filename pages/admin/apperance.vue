@@ -1,13 +1,15 @@
 <script setup lang="ts">
+  import AdminLayout from '~/layouts/AdminLayout/AdminLayout.vue';
   import { onClickOutside } from '@vueuse/core';
-import AdminLayout from '~/layouts/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
+  import type { Ref } from 'vue';
   const userStore = useUserStore();
-  const name = ref('');
-  const bio = ref('');
+  const name: Ref<string> = ref('');
+  const bio: Ref<string> = ref('');
   const data = ref(null);
-  const isBioFocused = ref(false);
-  let openCropper = ref(false);
+  const isBioFocused: Ref<Boolean> = ref(false);
+  let openCropper: Ref<Boolean> = ref(false);
+  const cropModal = ref(null);
   //definePageMeta({middleware:'is-logged-out'})
   const bioLengthComputed = computed(() => {
     return !bio.value ? 0 : bio.value.length;
@@ -17,38 +19,35 @@ import AdminLayout from '~/layouts/AdminLayout.vue';
     bio.value = userStore.bio;
   });
   const updateTheme = async (themeId: number) => {
-    //
     try {
       await userStore.updateTheme(themeId);
-    }catch (e){
-      console.log("error: ",e);
+    } catch (e) {
+      console.log('error: ', e);
     }
   };
   const updateUserDetails = useDebounce(async () => {
-    //
     try {
-      userStore.getTokens().then(()=>{
-        console.log("token");
-        userStore.updateUserDetail(name.value,bio.value).then(()=>{
-              console.log("after login");
-              userStore.getUser().then(()=>{
-                console.log("get user",userStore.name);
-              })
-            })
-          })
-    }catch (e){
-      console.log("error: ",e);
+      userStore.getTokens().then(() => {
+        console.log('token');
+        userStore.updateUserDetail(name.value, bio.value).then(() => {
+          console.log('after login');
+          userStore.getUser().then(() => {
+            console.log('get user', userStore.name);
+          });
+        });
+      });
+    } catch (e) {
+      console.log('error: ', e);
     }
-  },1000);
+  }, 1000);
   const updateUserImage = async () => {
     try {
       await userStore.updateUserImage(data.value);
       await userStore.getUser();
-      setTimeout(()=>openCropper.value=false,300);
-    }catch (e) {
-      console.log("error upd image: ",e);
+      setTimeout(() => (openCropper.value = false), 300);
+    } catch (e) {
+      console.log('error upd image: ', e);
     }
-
   };
   watch(
     () => name.value,
@@ -63,12 +62,9 @@ import AdminLayout from '~/layouts/AdminLayout.vue';
     async () => await updateUserImage(),
   );
 
-  const cropModal=ref(null);
-  onClickOutside(
-    cropModal,
-  (event) => {
-    openCropper.value = false
-  })
+  onClickOutside(cropModal, (event) => {
+    openCropper.value = false;
+  });
 </script>
 
 <template>
@@ -165,10 +161,11 @@ import AdminLayout from '~/layouts/AdminLayout.vue';
       </div>
       <MobileSectionDisplay />
       <CropperModal
-          ref="cropModal"
-          v-if="openCropper"
-          @data="($event) => (data = $event)"
-          @close="openCropper = false" :link-id="1" />
+        ref="cropModal"
+        v-if="openCropper"
+        @data="($event) => (data = $event)"
+        @close="openCropper = false"
+        :link-id="1" />
     </div>
   </AdminLayout>
 </template>

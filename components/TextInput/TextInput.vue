@@ -35,6 +35,7 @@
     return cva('input input-bordered w-full', {
       variants: {
         intent: {
+          base: '',
           primary: 'input-primary',
           secondary: 'input-secondary',
           accent: 'input-accent',

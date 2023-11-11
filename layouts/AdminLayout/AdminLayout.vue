@@ -2,16 +2,16 @@
   import { useUserStore } from '~/stores/user';
   import { storeToRefs } from 'pinia';
   import { onMounted } from 'vue';
-
-  import type { OnClickOutsideHandler } from '@vueuse/core'
-  import { onClickOutside } from '@vueuse/core'
+  import type { Ref } from 'vue';
+  import { onClickOutside } from '@vueuse/core';
+  import type { INavigationLink } from '~/layouts/AdminLayout/AdminLayout.interface';
 
   const userStore = useUserStore();
   const { updatedLinkId } = storeToRefs(userStore);
   const route = useRoute();
   const router = useRouter();
-  
-  const links = ref([
+
+  const links: Ref<INavigationLink[]> = ref([
     {
       name: 'Links',
       url: '/admin',
@@ -25,7 +25,7 @@
     { name: 'Analytics', url: '/', icon: 'tabler:brand-google-analytics' },
     { name: 'Settings', url: '/', icon: 'material-symbols:settings' },
   ]);
-  const linkSecondaryNav = ref([
+  const linkSecondaryNav: Ref<INavigationLink[]> = ref([
     {
       name: 'Links',
       url: '/admin',
@@ -44,7 +44,7 @@
       img: 'https://avatars.mds.yandex.net/get-mpic/11375416/2a0000018b56bcb47a42097dc308fd55ef96/300x300',
     },
   ]);
-  const linksMobile = ref([
+  const linksMobile: Ref<INavigationLink[]> = ref([
     {
       name: 'Links',
       url: '/admin',
@@ -77,10 +77,13 @@
     },
   ]);
 
-  const isTopNav = ref(false);
-  let windowWidth = ref(process.client ? window.innerWidth : '');
-  let isSecondaryTopNav = ref(false);
-  const openMenu = (str: string) => {
+  const isTopNav: Ref<boolean> = ref(false);
+  let windowWidth: Ref<string | number> = ref(
+    process.client ? window.innerWidth : '',
+  );
+  let isSecondaryTopNav: Ref<boolean> = ref(false);
+  const modalRef = ref(null);
+  const openMenu = (str: string): void => {
     if (str === 'TopNav') {
       isTopNav.value = true;
     } else if (str === 'SecondaryTopNav') {
@@ -89,19 +92,19 @@
       router.push('/admin/settings');
     }
   };
-  const logout = async() => {
-    try{
-        await userStore.logout();
-        router.push('/');
-        return
-    }catch(error){
+  const logout = async (): Promise<void> => {
+    try {
+      await userStore.logout();
+      router.push('/');
+      return;
+    } catch (error) {
       console.log(error);
     }
   };
   watch(
     () => windowWidth.value,
     () => {
-      if (windowWidth.value <= 767) {
+      if ((windowWidth.value as number) <= 767) {
         isTopNav.value = false;
       }
     },
@@ -128,15 +131,9 @@
       windowWidth.value = window.innerWidth;
     });
   });
-  const modalRef = ref(null)
-  onClickOutside(
-  modalRef,
-  (event) => {
-    isTopNav.value = false
-  },
-)
-
-
+  onClickOutside(modalRef, (event) => {
+    isTopNav.value = false;
+  });
 </script>
 
 <template>
@@ -150,7 +147,7 @@
         <div class="flex items-center w-max justify-start w-full max-w-[500px]">
           <NuxtLink to="/admin">
             <img
-              src="~/assets/images/linktree-logo-icon.png"
+              src="../../assets/images/linktree-logo-icon.png"
               class="w-[23px] min-w-[23px] select-none" />
           </NuxtLink>
           <div v-for="link in links" class="lg:px-2.5 px-0.5 md:block hidden">
@@ -158,7 +155,7 @@
               :to="link.url"
               class="flex items-center text-sm font-semibold px-1.5 py-3 rounded-lg hover:bg-gray-100">
               <Icon
-                :name="link.icon"
+                :name="link?.icon as string"
                 class="mt-0.5"
                 size="18"
                 :color="route.fullPath === link.url ? '#000000' : '#67685f'" />

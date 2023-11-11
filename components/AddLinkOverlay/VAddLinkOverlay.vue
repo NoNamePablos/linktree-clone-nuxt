@@ -1,25 +1,30 @@
 <script setup lang="ts">
   import { useUserStore } from '~/stores/user';
   import { storeToRefs } from 'pinia';
+  import type { Ref } from 'vue';
   const userStore = useUserStore();
-  const name = ref('');
-  const url = ref('');
+  const name: Ref<string> = ref('');
+  const url: Ref<string> = ref('');
   const { addLinkOverlay } = storeToRefs(userStore);
 
   onMounted(() => {
-    /*userStore.hidePageOverflow(true,'AdminPage')*/
+    userStore.hidePageOverflow(true, 'AdminPage');
   });
 
   const addLink = async () => {
     //
   };
   onUnmounted(() => {
-    /*userStore.hidePageOverflow(false,'AdminPage')*/
+    userStore.hidePageOverflow(false, 'AdminPage');
     addLinkOverlay.value = false;
   });
 
   const close = () => {
     addLinkOverlay.value = false;
+  };
+
+  const submit = async () => {
+    //Логика для отправки на бек
   };
 </script>
 

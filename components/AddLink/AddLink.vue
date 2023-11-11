@@ -1,18 +1,19 @@
 <script setup lang="ts">
+  import { Ref } from 'vue';
+
   const emit = defineEmits<{
     (e: 'close'): void;
   }>();
   const userStore = useUserStore();
-  const name = ref('');
-  const url = ref('');
+  const name: Ref<string> = ref('');
+  const url: Ref<string> = ref('');
 
   const addLink = async () => {};
 
-  const submit = async() => {
-      console.log("submit");
-      await userStore.addLink(name.value,url.value);
-      console.log("after submit");
-  
+  const submit = async () => {
+    console.log('submit');
+    await userStore.addLink(name.value, url.value);
+    console.log('after submit');
   };
 </script>
 

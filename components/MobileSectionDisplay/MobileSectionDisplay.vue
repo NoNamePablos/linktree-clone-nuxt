@@ -1,6 +1,8 @@
 <script setup lang="ts">
+  import { IUserExtendLink } from '~/types/link.interface';
+
   const userStore = useUserStore();
-  const fakeLink = [
+  const fakeLink: IUserExtendLink[] = [
     {
       id: 1,
       name: 'Yt Chanel',

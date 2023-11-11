@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import AdminLayout from '~/layouts/AdminLayout.vue';
+  import AdminLayout from '~/layouts/AdminLayout/AdminLayout.vue';
   import { useUserStore } from '~/stores/user';
- // definePageMeta({middleware:'is-logged-out'})
+  import type { IUserExtendLink } from '~/types/link.interface';
+  // definePageMeta({middleware:'is-logged-out'})
   const userStore = useUserStore();
-  const fakeLink = [
+  const fakeLink: IUserExtendLink[] = [
     {
       id: 1,
       name: 'Yt Chanel',

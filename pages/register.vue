@@ -1,37 +1,41 @@
 <script setup lang="ts">
   import AuthLayout from '~/layouts/AuthLayout.vue';
-  import {useUserStore} from "~/stores/user";
-  import {toRefs} from "vue";
-  definePageMeta({middleware:'is-logged-in'})
-  const userStore=useUserStore();
-  const router=useRouter();
+  import { useUserStore } from '~/stores/user';
+  import { toRefs } from 'vue';
+  definePageMeta({ middleware: 'is-logged-in' });
+  const userStore = useUserStore();
+  const router = useRouter();
   const userLogin = ref({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-  let errors = ref(null)
+  let errors = ref(null);
 
-const register = async () => {
-    errors.value = null
+  const register = async () => {
+    errors.value = null;
 
     try {
-        await userStore.getTokens().then((resolve)=>{
-          userStore.register(
-          userLogin.value.username, 
-          userLogin.value.email, 
-            userLogin.value.password, 
-            userLogin.value.confirmPassword
-        ).then((resolve)=>{
-            userStore.getUser()
-          }).then(resolve=> router.push('/admin'))
-        })
+      await userStore.getTokens().then((resolve) => {
+        userStore
+          .register(
+            userLogin.value.username,
+            userLogin.value.email,
+            userLogin.value.password,
+            userLogin.value.confirmPassword,
+          )
+          .then((resolve) => {
+            userStore.getUser();
+          })
+          .then((resolve) => router.push('/admin'));
+      });
     } catch (error) {
-        console.log(error)
-        errors.value = error.response.data.errors
+      console.log(error);
+      // @ts-ignore
+      errors.value = error.response.data.errors;
     }
-}
+  };
 </script>
 
 <template>
@@ -45,26 +49,22 @@ const register = async () => {
           v-model="userLogin.username"
           input-type="text"
           placeholder="Username"
-          :error="errors&&errors.name?errors.name[0]:''"
-        />
+          :error="errors && errors.name ? errors.name[0] : ''" />
         <TextInput
           v-model="userLogin.email"
           input-type="email"
           placeholder="Email: link@gmail.com"
-          :error="errors&&errors.email?errors.email[0]:''"
-        />
+          :error="errors && errors.email ? errors.email[0] : ''" />
         <TextInput
           v-model="userLogin.password"
           input-type="password"
           placeholder="Password"
-          :error="errors&&errors.password?errors.password[0]:''"
-        />
+          :error="errors && errors.password ? errors.password[0] : ''" />
         <TextInput
           v-model="userLogin.confirmPassword"
           input-type="password"
           placeholder="Password"
-          :error="errors&&errors.password?errors.password[0]:''"
-        />
+          :error="errors && errors.password ? errors.password[0] : ''" />
         <div class="mt-10">
           <button
             type="submit"

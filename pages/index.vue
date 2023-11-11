@@ -1,32 +1,34 @@
 <script setup lang="ts">
   import AuthLayout from '~/layouts/AuthLayout.vue';
-  definePageMeta({middleware:'is-logged-in'})
-  const userStore=useUserStore();
-  const router=useRouter();
+  definePageMeta({ middleware: 'is-logged-in' });
+  const userStore = useUserStore();
+  const router = useRouter();
   const userLogin = ref({
     email: '',
     password: '',
   });
-  const errors=ref(null);
-  const login=async()=>{
-    errors.value=null;
-    
+  const errors = ref(null);
+  const login = async () => {
+    errors.value = null;
+
     try {
-          userStore.getTokens().then(()=>{
-            userStore.login(userLogin.value.email,userLogin.value.password).then(()=>{
-              console.log("after login");
-              userStore.getUser().then(()=>{
-                console.log("redirected");
-                router.push('/admin');
-              })
-            })
-          })
-          
+      userStore.getTokens().then(() => {
+        userStore
+          .login(userLogin.value.email, userLogin.value.password)
+          .then(() => {
+            console.log('after login');
+            userStore.getUser().then(() => {
+              console.log('redirected');
+              router.push('/admin');
+            });
+          });
+      });
     } catch (error) {
-        console.log(error)
-        errors.value = error.response.data.errors
+      console.log(error);
+      // @ts-ignore
+      errors.value = error.response.data.errors;
     }
-  }
+  };
 </script>
 
 <template>

@@ -1,14 +1,15 @@
 <script setup lang="ts">
   import { useUserStore } from '~/stores/user';
+  import type { Ref } from 'vue';
 
   const userStore = useUserStore();
   const { isMobile, updatedLinkId } = storeToRefs(userStore);
-  const name = ref('');
-  const isDelete = ref(false);
-  let url = ref('');
+  const name: Ref<string> = ref('');
+  const isDelete: Ref<boolean> = ref(false);
+  let url: Ref<string> = ref('');
   let data = ref(null);
-  let openCropper = ref(false);
-  let isUploadImage = ref(false);
+  let openCropper: Ref<boolean> = ref(false);
+  let isUploadImage: Ref<boolean> = ref(false);
 
   interface ILinkBox {
     link: Object;
@@ -33,12 +34,13 @@
   }>();
   onMounted(() => {
     console.log(link.value);
-    name.value = link.avlue?.name;
+    name.value = link.value?.name;
     url.value = link.value?.url;
     document.addEventListener('mouseup', function (e) {
       let editNameInput = document.getElementById(
         `editNameInput-${link.value.id}`,
       );
+
       if (
         editNameInput &&
         !editNameInput.contains(e.target) &&
@@ -68,6 +70,7 @@
   const changeInput = (str: string, linkIdNameString: string) => {
     if (selectedId.value == link.value.id && selectedStr.value == str) {
       setTimeout(() => {
+        //@ts-ignore
         document.getElementById(`${linkIdNameString}-${link.value.id}`).focus();
         return;
       }, 100);
@@ -140,9 +143,9 @@
   );
   watch(
     () => data.value,
-    async () =>{
+    async () => {
       console.log(data.value);
-      await updateLinkImage()
+      await updateLinkImage();
     },
   );
 </script>
